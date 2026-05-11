@@ -32,36 +32,6 @@ bool is_number(const std::string& str) {
     return true;
 }
 
-std::vector<std::string> read_file_to_vector(const std::string& file_path) {
-    std::ifstream file(file_path, std::ios::in);
-    if (!file) {
-        std::cerr << "Error opening file.\n";
-        exit(EXIT_FAILURE);
-    }
-    std::string file_contents;
-    std::string line;
-    while (std::getline(file, line)) {
-        file_contents += line + "\n";
-    }
-    std::vector<std::string> returnable;
-    returnable.push_back(file_contents);
-    return returnable;
-}
-
-std::string read_file_to_string(const std::string& file_path) {
-    std::ifstream file(file_path, std::ios::in);
-    if (!file) {
-        std::cerr << "Error opening file.\n";
-        exit(EXIT_FAILURE);
-    }
-    std::string file_contents;
-    std::string line;
-    while (std::getline(file, line)) {
-        file_contents += line + "\n";
-    }
-    return file_contents;
-}
-
 std::string get_id_from_csv(const std::string& line) {
     std::stringstream ss(line);
     std::string id;
@@ -76,7 +46,6 @@ std::string serialize(const Employee& emp) {
             emp.gender + "," +
             emp.date_of_birth + "," +
             (emp.is_deleted ? "1" : "0");
-    // id,name,surname,gender,dob,is_deleted (CSV format)
 }
 
 Employee deserialize(const std::string& line) {
@@ -97,7 +66,6 @@ Employee deserialize(const std::string& line) {
 }
 
 void print_employee_details(const Employee& employee) {
-    // Print in CSV format
     std::cout << employee.id << "," << employee.name << "," << employee.surname << "," << employee.gender << "," << employee.date_of_birth << "\n"; 
 }
 
@@ -167,7 +135,6 @@ void update_record(std::string file_path, const std::string& target_id, int fiel
     }
 }
 
-// Delete CSV Employee in file (get by ID)
 void delete_record(std::string file_path, const std::string& target_id) {
     std::ifstream in(file_path);
     if (!in) {
@@ -197,17 +164,11 @@ void delete_record(std::string file_path, const std::string& target_id) {
         return;
     }
 
-    // Replace original file
     std::remove(file_path.c_str());
     std::rename("temp.txt", file_path.c_str());
     in.close();
     out.close();
 }
-
-/*
-TODO: When adding employees, make sure no two employees can have the same ID.
-      Implement editing employees properly. Original code broke.
-*/
 
 int main(void) {
     while (is_running) {
